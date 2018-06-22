@@ -1,9 +1,6 @@
 package com.codecool.thehistory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class TheHistoryArrayList implements TheHistory {
     /**
@@ -47,7 +44,69 @@ public class TheHistoryArrayList implements TheHistory {
 
     @Override
     public void replaceMoreWords(String[] fromWords, String[] toWords) {
-        //TODO: check the TheHistory interface for more information
+        int lenFrom = fromWords.length;
+        int lenTo = toWords.length;
+
+        if (lenFrom == lenTo) {
+            for (int i = 0; i < size(); i++) {
+                if (wordsArrayList.get(i).equals(fromWords[0])) {
+                    int pos = 0;
+                    int cnt = 0;
+                    for (int j = i; ((j < size()) && (j < i + lenFrom)); j++) {
+                        if (wordsArrayList.get(j).equals(fromWords[pos++])) {
+                            cnt++;
+                        } else {
+                            break;
+                        }
+                    }
+                    if (cnt == lenFrom) {
+                        pos = 0;
+                        for (int j = i; ((j < size()) && (j < i + lenFrom)); j++) {
+                            wordsArrayList.set(j, toWords[pos++]);
+                        }
+                    }
+                }
+            }
+        } else if (lenFrom < lenTo) {
+            for (int i = 0; i < size(); ) {
+                if (wordsArrayList.get(i).equals(fromWords[0])) {
+                    int pos = 0;
+                    int cnt = 0;
+                    for (int j = i; (j < i + lenFrom) && (j < size()); j++) {
+                        if (wordsArrayList.get(i).equals(fromWords[pos++])) {
+                            cnt += 1;
+                        } else {
+                            break;
+                        }
+                    }
+                    if (cnt == lenFrom) {
+                        pos = 0;
+                        int j;
+                        for (j = i; (j < i + lenFrom) && (j < size()); j++) {
+                            wordsArrayList.set(j, toWords[pos++]);
+                        }
+
+                        String[] wordsToInsert = Arrays.copyOfRange(toWords, lenFrom, lenTo);
+                        insertWordsAtIndex(j, wordsToInsert);
+                        i += lenTo;
+
+                    } else {
+                        i++;
+                    }
+                } else {
+                    i++;
+                }
+            }
+        }
+
+    }
+
+    private void insertWordsAtIndex(int index, String[] wordsToInsert) {
+        int pos = index;
+
+        for (String aWordsToInsert : wordsToInsert) {
+            wordsArrayList.add(pos++, aWordsToInsert);
+        }
     }
 
     @Override
