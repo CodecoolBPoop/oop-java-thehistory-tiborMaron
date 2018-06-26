@@ -73,7 +73,7 @@ public class TheHistoryArrayList implements TheHistory {
                     int pos = 0;
                     int cnt = 0;
                     for (int j = i; (j < i + lenFrom) && (j < size()); j++) {
-                        if (wordsArrayList.get(i).equals(fromWords[pos++])) {
+                        if (wordsArrayList.get(j).equals(fromWords[pos++])) {
                             cnt += 1;
                         } else {
                             break;
@@ -97,15 +97,42 @@ public class TheHistoryArrayList implements TheHistory {
                     i++;
                 }
             }
-        }
+        } else {
+            for (int i = 0; i < size(); i++) {
+                if (wordsArrayList.get(i).equals(fromWords[0])) {
+                    int pos = 0;
+                    int cnt = 0;
+                    for (int j = i; (j < i + lenFrom) && (j < size()); j++) {
+                        if (wordsArrayList.get(j).equals(fromWords[pos++])) {
+                            cnt++;
+                        } else {
+                            break;
+                        }
+                    }
+                    if (cnt == lenFrom) {
+                        pos = 0;
+                        int j;
+                        for (j = i; (j < i + lenTo) && (j < size()); j++) {
+                            wordsArrayList.set(j, toWords[pos++]);
+                        }
 
+                        deleteWordsAtIndex(j, lenFrom - lenTo);
+                    }
+                }
+            }
+        }
     }
 
     private void insertWordsAtIndex(int index, String[] wordsToInsert) {
         int pos = index;
-
         for (String aWordsToInsert : wordsToInsert) {
             wordsArrayList.add(pos++, aWordsToInsert);
+        }
+    }
+
+    private void deleteWordsAtIndex(int index, int amount) {
+        for (int i = 0; i < amount; i++) {
+            wordsArrayList.remove(index);
         }
     }
 
